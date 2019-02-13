@@ -73,6 +73,11 @@ public class ToolbarEditText extends CustomEditText
     // Do not process autocomplete result
     private boolean mDiscardAutoCompleteResult;
 
+    /* Cliqz Start */
+    private PreferenceManager mPreferenceManager;
+    /* Cliqz End */
+
+
     public ToolbarEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
@@ -105,6 +110,8 @@ public class ToolbarEditText extends CustomEditText
         /* Cliqz start */
         EventDispatcher.getInstance().registerUiThreadListener(this,
                 "Search:Autocomplete", null);
+        mPreferenceManager = PreferenceManager.getInstance();
+        updateTheme();
         /* Cliqz end */
     }
 
@@ -123,7 +130,7 @@ public class ToolbarEditText extends CustomEditText
             resetAutocompleteState();
             /* Cliqz start */
             // Let's possibly warm up the search extension
-            if(PreferenceManager.getInstance(mContext.getApplicationContext()).isQuickSearchEnabled()) {
+            if(PreferenceManager.getInstance().isQuickSearchEnabled()) {
                 EventDispatcher.getInstance().dispatch("Search:Warmup", null);
             }
             /* Cliqz end */
@@ -551,7 +558,7 @@ public class ToolbarEditText extends CustomEditText
 
             /* Cliqz start */
             // Let's send the non-autocompleted text to the Cliqz search extension
-            if(PreferenceManager.getInstance(mContext.getApplicationContext()).isQuickSearchEnabled()) {
+            if(PreferenceManager.getInstance().isQuickSearchEnabled()) {
                 final GeckoBundle bundle = new GeckoBundle();
                 bundle.putString("q", text);
                 EventDispatcher.getInstance().dispatch("Search:Search", bundle);
@@ -686,7 +693,7 @@ public class ToolbarEditText extends CustomEditText
         switch (event) {
             case "Search:Autocomplete":
                 final String autoCompletion = message.getString("data");
-                if (PreferenceManager.getInstance(mContext.getApplicationContext()).isAutocompleteEnabled()) {
+                if (PreferenceManager.getInstance().isAutocompleteEnabled()) {
                     onAutocomplete(autoCompletion);
                 }
                 break;
@@ -694,5 +701,10 @@ public class ToolbarEditText extends CustomEditText
                 break;
         }
     }
+
+    private void updateTheme() {
+        setLightTheme(mPreferenceManager.isLightThemeEnabled());
+    }
+
     /* Cliqz end */
 }

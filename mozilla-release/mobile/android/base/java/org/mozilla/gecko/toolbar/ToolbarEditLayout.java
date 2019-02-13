@@ -266,9 +266,11 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
         showSoftInput();
     }
 
-    void setText(String text) {
+    /*Cliqz Start*/
+    public void setText(String text) {
         mEditText.setText(text);
     }
+    /*Cliqz End*/
 
     String getText() {
         return mEditText.getText().toString();
@@ -363,4 +365,12 @@ public class ToolbarEditLayout extends ThemedLinearLayout {
             }
         });
     }
+
+    /* Cliqz Start */
+    public void setLightTheme(boolean isLightTheme) {
+        super.setLightTheme(isLightTheme);
+        mEditText.setLightTheme(isLightTheme);
+        mThemeBackground.setLightTheme(isLightTheme);
+    }
+    /* Cliqz End */
 }
